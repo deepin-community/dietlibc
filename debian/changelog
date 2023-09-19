@@ -1,3 +1,9 @@
+dietlibc (0.34~cvs20160606-14) unstable; urgency=low
+
+  * Ask dpkg-buildflags to keep LTO disabled. (Closes: #1015386)
+
+ -- Thorsten Glaser <tg@mirbsd.de>  Tue, 19 Jul 2022 19:07:37 +0200
+
 dietlibc (0.34~cvs20160606-12) unstable; urgency=low
 
   [ John David Anglin ]
