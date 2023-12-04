@@ -10,7 +10,8 @@ LC_ALL:=C.UTF-8
 export LC_ALL
 
 # dietlibc is static, where PIE is currently unsupported
-export DEB_BUILD_MAINT_OPTIONS=hardening=+all,-pie
+# GCC LTO is broken anyway and extremely unappropriate for dietlibc anyway
+export DEB_BUILD_MAINT_OPTIONS=hardening=+all,-pie optimize=-lto
 export DEB_CFLAGS_MAINT_APPEND=-Wall -fno-pie
 export DEB_LDFLAGS_MAINT_APPEND=-no-pie
 
