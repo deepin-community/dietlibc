@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ -z "$1" ] || ! [ -d "bin-$1" ] ; then
+if [ -z "$1" ] || ! [ -d "bin-$1" ]; then
 	echo "Usage: $0 DIETARCH" >&2
 	exit 1
 fi
@@ -63,18 +63,18 @@ test/stdlib/tst-system.c
 # Figure out longest len so we can pretty-print the test results.
 LONGEST_LEN=0
 for i in $TESTS; do
-  if [ ${#i} -gt $LONGEST_LEN ] ; then
-    LONGEST_LEN=${#i}
-  fi
+	if [ ${#i} -gt $LONGEST_LEN ]; then
+		LONGEST_LEN=${#i}
+ 	fi
 done
 
 # Figure out if we are running in a Qemu user instance
 # (in order to ignore failures from tests that we expect
 # will fail under Qemu)
 if [ -d /proc/$$ ] ; then
-	case "$(readlink -fe /proc/$$/exe)" in
-		*/qemu-*)	QEMU=1 ;;
-		*)		QEMU=0 ;;
+	case $(readlink -f /proc/$$/exe) in
+	(*/qemu-*)	QEMU=1 ;;
+	(*)		QEMU=0 ;;
 	esac
 else
 	# We should really have /proc during build, but just in
@@ -84,44 +84,37 @@ fi
 
 EXPECT_FAIL=""
 NO_STACK_PROTECTOR=""
-if [ $QEMU -eq 1 ] ; then
-	case "$(dpkg-architecture -qDEB_HOST_ARCH)" in
-		# fadvise is broken on 32bit arm, 32bit BE mips, and 32bit PowerPC Qemu
-		#   (syscall also fails with glibc, as of Qemu 2.5)
-		# printf tests are broken plain powerpc32 (but not powerpcspe), because
-		# we compile dietlibc with -mpowerpc-gpopt, but Qemu doesn't emulate the
-		# FPU instructions required for that to work (as of Qemu 2.5)
-		armel|armhf|mips|powerpcspe) EXPECT_FAIL="test/fadvise.c" ;;
-		powerpc)                     EXPECT_FAIL="test/fadvise.c test/printf.c test/printf2.c test/sprintf.c" ;;
-		*)                           ;;
+HOST_ARCH=$(dpkg-architecture -qDEB_HOST_ARCH)
+if test 1 = $QEMU; then
+	# fadvise is possibly broken on 32bit BE mips, and 32bit PowerPC Qemu
+	#   (syscall also fails with glibc, as of Qemu 2.5)
+	# printf tests are broken plain powerpc32 (but not powerpcspe), because
+	# we compile dietlibc with -mpowerpc-gpopt, but Qemu doesn't emulate the
+	# FPU instructions required for that to work (as of Qemu 2.5)
+	case $HOST_ARCH in
+	(mips|powerpcspe)
+		EXPECT_FAIL="test/fadvise.c"
+		;;
+	(powerpc)
+		EXPECT_FAIL="test/fadvise.c test/printf.c test/printf2.c test/sprintf.c"
+		;;
+	(*)
+		;;
+	esac
+	# many Linux filesystems (in particular ext2/3/4 but not SGI xfs or
+	# tmpfs) have too wide dirent offsets for ILP32 nōn-largefile code,
+	# possibly excepting actual 32-bit programs; qemu-user is generally
+	# 64-bit and therefore cannot provide working telldir at all; see:
+	# https://sourceware.org/bugzilla/show_bug.cgi?id=23960
+	case $(dpkg-architecture -qDEB_HOST_ARCH_BITS) in
+	(32)
+		EXPECT_FAIL="$EXPECT_FAIL test/dirent/tst-seekdir.c"
+		;;
 	esac
 fi
-case "$(dpkg-architecture -qDEB_HOST_ARCH)" in
-	powerpc|powerpcspe|ppc64|ppc64el)
-		# This test has apparently never worked on powerpc* with
-		# -fstack-protector-strong (but only now that we actually use
-		# that flag we discover that), because it seems to smash the
-		# stack. It's unclear what the reason behind this is, because
-		# there appears to be no PPC-specific assembly code from
-		# dietlibc in any code path here... What's more, reducing the
-		# size of the test will make the error go away entirely...?
-		# It's important to investigate this further, but this is
-		# not a regression, so let the test pass for now by disabling
-		# SSP for it...
-		NO_STACK_PROTECTOR="${NO_STACK_PROTECTOR} test/stdlib/tst-calloc.c"
-		;;
-	*)
-		;;
-esac
-case "$(dpkg-architecture -qDEB_HOST_ARCH)" in
-	# Currently this fails on ARM64 w/ pthreads due to unaligned
-	# memory access when -lpthread is used. Until this issue can
-	# be investigated further just mark this test as an expected
-	# failure for now. This is NOT a regression because the
-	# -lpthread variant was only enabled shortly, so the same
-	# test will also fail with previous versions.
-	arm64) EXPECT_FAIL="${EXPECT_FAIL} test/stdlib/tst-calloc.c" ;;
-	*)     ;;
+case $HOST_ARCH in
+(*)
+	;;
 esac
 
 expect_fail()

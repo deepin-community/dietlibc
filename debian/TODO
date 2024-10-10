@@ -1,11 +1,6 @@
 TODO list for dietlibc in Debian
 --------------------------------
 
-Bugs:
-
- - investigate SSP-caused test failure of tst-calloc.c on
-   PowerPC (32 and 64 bit) platforms
-
 Package features:
 
  - reenable dynamic linking support on architectures

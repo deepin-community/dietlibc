@@ -28,8 +28,7 @@ Forwarded: no
  Shouldn't be forwarded, as it only works around the errno case, but
  not other cases of TLS variables.
 Last-Update: 2016-05-29
----
-This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+
 --- a/include/errno.h
 +++ b/include/errno.h
 @@ -704,7 +704,11 @@

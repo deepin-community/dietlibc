@@ -6,8 +6,7 @@ Description: alpha: fix broken setjmp()
  own prologue, reading a wrong value and crashing.
 Author: Christian Seiler <christian@iwakd.de>
 Last-Update: 2017-01-25
----
-This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+
 --- a/alpha/setjmp.S
 +++ b/alpha/setjmp.S
 @@ -1,16 +1,34 @@

@@ -4,8 +4,7 @@ Description: Fix insecure default PATH
 Author: Christian Seiler <christian@iwakd.de>
 Bug: http://news.gmane.org/find-root.php?message_id=alpine.DEB.2.20.1607181048300.24083%40tglase.lan.tarent.de
 Last-Update: 2016-07-20
----
-This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+
 --- a/include/paths.h
 +++ b/include/paths.h
 @@ -2,7 +2,7 @@

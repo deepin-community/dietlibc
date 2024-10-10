@@ -5,8 +5,7 @@ Description: Fix return value of __testandset on alpha
  could be taken.
 Author: Christian Seiler <christian@iwakd.de>
 Last-Update: 2017-01-25
----
-This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+
 --- a/alpha/__testandset.S
 +++ b/alpha/__testandset.S
 @@ -8,4 +8,7 @@ __testandset:

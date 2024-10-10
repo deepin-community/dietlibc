@@ -7,6 +7,8 @@ workarounds/sparc64-tls-errno.diff
 workarounds/tcb-on-stack-atexit.diff
 
 # Bugfixes
+bugfixes/freestanding.diff
+bugfixes/encoding.diff
 bugfixes/missing-socket-syscalls.diff
 bugfixes/pthread-dont-override-errno-location.diff
 bugfixes/aarch64-define-__clone.diff
@@ -30,6 +32,9 @@ bugfixes/testandset-size-and-alignment.diff
 bugfixes/cflags.diff
 bugfixes/x32-struct-member-sizes.diff
 bugfixes/hppa-socketcalls.diff
+bugfixes/hppa-update.diff
+bugfixes/hppa-syscallargs.diff
+bugfixes/gcc14.diff
 
 # New features not yet in upstream
 features/unshare.diff

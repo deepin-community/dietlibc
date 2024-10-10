@@ -18,10 +18,6 @@ Description: sparc: use -mcpu=v9 instead of -mcpu=supersparc
 Author: Gerrit Pape <pape@smarden.org>
 Forwarded: no
 Last-Update: 2010-04-20
----
- diet.c             |    2 +-
- sparc/Makefile.add |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
 --- a/diet.c
 +++ b/diet.c

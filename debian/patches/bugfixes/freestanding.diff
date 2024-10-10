@@ -1,0 +1,18 @@
+Description: add missing -ffreestanding to avoid trouble
+ with the optimiser replacing e.g. the implementation of
+ strlen(3) with a call to strlen
+Author: mirabilos <tg@debian.org>
+Bug-Debian: https://bugs.debian.org/1069365
+Forwarded: <62ebdad3-ae13-d4a9-f2a1-52fff07eb3cc@evolvis.org>
+
+--- a/Makefile
++++ b/Makefile
+@@ -116,7 +116,7 @@ all: $(WHAT)
+ 
+ profiling: $(OBJDIR)/libgmon.a $(OBJDIR)/pstart.o
+ 
+-DEFAULTCFLAGS=-pipe -nostdinc -D_REENTRANT $(EXTRACFLAGS)
++DEFAULTCFLAGS=-pipe -nostdinc -ffreestanding -D_REENTRANT $(EXTRACFLAGS)
+ CFLAGS=$(DEFAULTCFLAGS)
+ CROSS=
+ 

@@ -10,7 +10,9 @@ LC_ALL:=C.UTF-8
 export LC_ALL
 
 # dietlibc is static, where PIE is currently unsupported
-export DEB_BUILD_MAINT_OPTIONS=hardening=+all,-pie
+# GCC LTO is broken anyway and extremely unappropriate for dietlibc anyway
+# abi=+time64 is glibc-specific; LFS is handled internally
+export DEB_BUILD_MAINT_OPTIONS=hardening=+all,-pie optimize=-lto abi=-lfs,-time64
 export DEB_CFLAGS_MAINT_APPEND=-Wall -fno-pie
 export DEB_LDFLAGS_MAINT_APPEND=-no-pie
 
@@ -85,6 +87,18 @@ DEBIAN_CFLAGS=$(shell dpkg-buildflags --get CPPFLAGS) $(shell dpkg-buildflags --
 override_dh_auto_configure:
 override_dh_auto_build-indep:
 override_dh_auto_build-arch:
+ifeq (0armel,${CROSS}${DEBIANARCH})
+	# cf. Debian bug #1017537
+	if gcc -O2 -Wall -Wextra -Wformat -Wno-unused debian/armel-swp.c && \
+	    ./a.out && rm -f a.out; then \
+		echo armel SWP instruction ok; \
+	else \
+		echo armel SWP instruction FAIL; \
+		cat /proc/sys/abi/swp; \
+		ls -l /proc/sys/abi/swp; \
+		exit 1; \
+	fi
+endif
 	# cf. Debian bug #523086
 	test '!' -f parisc/strstr.S || \
 	    mv -f parisc/strstr.S parisc/strstr.S.disabled
@@ -126,6 +140,7 @@ override_dh_auto_install-arch:
 	  >debian/dietlibc-dev.postinst
 	sed -e 's/|ARCH|/$(ARCH)/g;s/|TRIPLET|/$(TRIPLET)/g;s/|DEBIANARCH|/$(DEBIANARCH)/g' <debian/dietlibc-dev.prerm.in \
 	  >debian/dietlibc-dev.prerm
+	chmod -x debian/*/usr/lib/$(TRIPLET)/diet/lib*/*.o
 
 _ANONCVSROOT:=		:pserver:cvs@cvs.fefe.de:/cvs
 _CVSEXPORT:=		env CVS_RSH=ssh TZ=UTC cvs -qd ${_ANONCVSROOT} -z9 export

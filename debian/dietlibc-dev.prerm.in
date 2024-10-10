@@ -6,7 +6,11 @@ if [ "$1" = "remove" ] ; then
 		/usr/lib/|TRIPLET|/diet/lib-|ARCH|
 	update-alternatives --remove diet \
 		/usr/lib/|TRIPLET|/diet/bin/diet
-	rmdir --ignore-fail-on-non-empty /usr/lib/diet/bin
+	for dir in /usr/lib/diet/bin /usr/lib/diet; do
+		if test -d "$dir"; then
+			rmdir --ignore-fail-on-non-empty "$dir"
+		fi
+	done
 fi
 
 #DEBHELPER#

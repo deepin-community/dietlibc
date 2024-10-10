@@ -4,8 +4,7 @@ Description: Build __munmap_and_exit on x32
  Makefile.add.)
 Author: Christian Seiler <christian@iwakd.de>
 Last-Update: 2017-01-05
----
-This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+
 --- a/x32/Makefile.add
 +++ b/x32/Makefile.add
 @@ -1,3 +1,3 @@

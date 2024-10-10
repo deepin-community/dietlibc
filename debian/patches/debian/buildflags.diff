@@ -5,6 +5,7 @@ Author: Christian Seiler <christian@iwakd.de>
 Forwarded: no
  Maybe we should forward this?
 Last-Update: 2016-10-31
+
 --- a/Makefile
 +++ b/Makefile
 @@ -9,6 +9,7 @@ BINDIR=${prefix}/bin

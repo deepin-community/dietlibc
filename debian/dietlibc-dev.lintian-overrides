@@ -1,2 +1,11 @@
 # this is by design, dietlibc always links statically
 dietlibc-dev: statically-linked-binary
+
+# this is by design
+dietlibc-dev: no-code-sections *libcrypt.a*
+
+# handled by alternatives
+dietlibc-dev: spare-manual-page */diet.1*
+
+# Multi-Arch and handled by alternatives
+dietlibc-dev: executable-in-usr-lib

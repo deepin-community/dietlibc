@@ -1,0 +1,15 @@
+Description: transcode to UTF-8
+Author: lintian
+Forwarded: no
+
+--- a/THANKS
++++ b/THANKS
+@@ -11,7 +11,7 @@ been completely replaced now.
+ I initially took localtime and the directory reading routines from
+ uClibc, but the code has been completely replaced now.
+ 
+-syslog and crypt were contributed by René Müller.
++syslog and crypt were contributed by RenÃ© MÃ¼ller.
+ 
+ Jeff Garzik contributed {get,set}{pw,gr,sp}ent.
+ 

@@ -1,11 +1,11 @@
 Source: dietlibc
 Section: devel
 Priority: optional
-Homepage: http://www.fefe.de/dietlibc/
+Homepage: https://www.fefe.de/dietlibc/
 Maintainer: Christian Seiler <christian@iwakd.de>
 Uploaders: Thorsten Glaser <tg@mirbsd.de>
-Standards-Version: 4.4.1
-Build-Depends: debhelper-compat (= 12), dh-exec
+Standards-Version: 4.7.0
+Build-Depends: debhelper-compat (= 13), dh-exec
 Rules-Requires-Root: no
 Vcs-Git: https://salsa.debian.org/debian/dietlibc.git
 Vcs-Browser: https://salsa.debian.org/debian/dietlibc
@@ -19,7 +19,8 @@ Suggests: dietlibc-doc
 Description: diet libc - a libc optimized for small size
  The diet libc is a C library that is optimized for small size. It
  can be used to create small statically linked binaries for Linux
- on alpha, arm, ia64, mips, mipsel, ppc, parisc, s390, sparc and x86.
+ on alpha, ARM, hppa (PA-RISC), IA-64, MIPS, PowerPC, S/390, SPARC
+ and x86 under GPLv2.
  .
  This package is used to compile programs with the diet libc.
  .
@@ -35,6 +36,7 @@ Suggests: dietlibc-dev
 Description: diet libc documentation - a libc optimized for small size
  The diet libc is a C library that is optimized for small size. It
  can be used to create small statically linked binaries for Linux
- on alpha, arm, ia64, mips, mipsel, ppc, parisc, s390, sparc and x86.
+ on alpha, ARM, hppa (PA-RISC), IA-64, MIPS, PowerPC, S/390, SPARC
+ and x86 under GPLv2.
  .
  This package contains the documentation for the diet libc.
