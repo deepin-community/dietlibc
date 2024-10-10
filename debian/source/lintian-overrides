@@ -1,5 +1,10 @@
 # these do not need to be installed
-dietlibc source: package-does-not-install-examples examples/
+dietlibc source: package-does-not-install-examples
 
 # none available, CVS checkout
 dietlibc source: orig-tarball-missing-upstream-signature
+
+# checked
+dietlibc source: very-long-line-length-in-source-file *libm/erf.c*
+dietlibc source: very-long-line-length-in-source-file *Makefile*
+dietlibc source: very-long-line-length-in-source-file *test/runtests.sh*

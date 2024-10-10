@@ -5,8 +5,7 @@ Description: Don't override errno_location in libpthread if TLS is enabled
 Author: Christian Seiler <christian@iwakd.de>
 Bug-Debian: https://bugs.debian.org/850276
 Last-Update: 2017-01-05
----
-This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+
 --- a/libpthread/pthread_internal.c
 +++ b/libpthread/pthread_internal.c
 @@ -155,11 +155,14 @@ static void kill_all_threads(int sig,int

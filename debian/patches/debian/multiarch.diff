@@ -14,8 +14,7 @@ Description: Add Debian multiarch to diet wrapper
 Author: Christian Seiler <christian@iwakd.de>
 Forwarded: no (Debian-specific)
 Last-Update: 2016-05-02
----
-This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+
 --- a/diet.c
 +++ b/diet.c
 @@ -1,4 +1,4 @@

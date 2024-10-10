@@ -6,8 +6,7 @@ Description: Properly initialize pthread_atfork's spinlock
  code to loop endlessly on fork() whenever -lpthread was linked in.
 Author: Christian Seiler <christian@iwakd.de>
 Last-Update: 2017-01-25
----
-This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+
 --- a/libpthread/pthread_atfork.c
 +++ b/libpthread/pthread_atfork.c
 @@ -5,7 +5,7 @@

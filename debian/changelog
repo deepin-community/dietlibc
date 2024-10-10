@@ -1,3 +1,66 @@
+dietlibc (0.34~cvs20160606-18) unstable; urgency=medium
+
+  [ Helge Deller ]
+  * hppa brown paper bag fix
+
+ -- Thorsten Glaser <tg@mirbsd.de>  Wed, 10 Jul 2024 02:50:42 +0200
+
+dietlibc (0.34~cvs20160606-17) unstable; urgency=medium
+
+  [ Helge Deller ]
+  * make 5/6-args syscalls generally more reliable on hppa
+
+ -- Thorsten Glaser <tg@mirbsd.de>  Tue, 09 Jul 2024 22:18:21 +0200
+
+dietlibc (0.34~cvs20160606-16) unstable; urgency=medium
+
+  [ Helge Deller ]
+  * fix socketfns test crash in recvfrom()
+
+ -- Thorsten Glaser <tg@mirbsd.de>  Mon, 08 Jul 2024 18:37:00 +0200
+
+dietlibc (0.34~cvs20160606-15) unstable; urgency=medium
+
+  * upload to unstable reverting GCC 14 test B-D
+  * d/copyright: complete licence review, entirely new
+    (cf. #1067946)
+  * update description and patch headers
+  * un-mark fadvise test as expect-fail on ARM (works now)
+  * mark socketfns test as expect-fail on parisc (hppa),
+    as qemu-user needs to be updated to match changed Linux kernel
+
+ -- Thorsten Glaser <tg@mirbsd.de>  Sat, 06 Jul 2024 17:28:41 +0200
+
+dietlibc (0.34~cvs20160606-14exp1) experimental; urgency=high
+
+  [ Debian Janitor, lintian-brush ]
+  * fix d/copyright, d/watch, Homepage, UMEGAYA and d/changelog
+  * bump debhelper and S-V
+
+  [ Bastian Germann ]
+  * d/watch: Scan for other compression formats
+
+  [ Helge Deller ]
+  * Update hppa defs (Closes: #974690) (Closes: #1030998)
+
+  [ Thorsten Glaser ]
+  * avoid rmdir failing with ENOENT
+  * add -ffreestanding to libc builds (Closes: #1069365)
+  * test swp instruction for armel builds (Closes: #1017537)
+  * B-D on GCC 14 and fix FTBFS with it (Closes: #1074910)
+    uploading to experimental for that
+  * Unbreak building on architectures with LFS/t64 in dpkg-buildflags
+  * More fixing of the stack protector, pthreads, etc.
+  * Apply lintian fixes
+
+ -- Thorsten Glaser <tg@mirbsd.de>  Fri, 05 Jul 2024 00:20:35 +0200
+
+dietlibc (0.34~cvs20160606-14) unstable; urgency=low
+
+  * Ask dpkg-buildflags to keep LTO disabled. (Closes: #1015386)
+
+ -- Thorsten Glaser <tg@mirbsd.de>  Tue, 19 Jul 2022 19:07:37 +0200
+
 dietlibc (0.34~cvs20160606-12) unstable; urgency=low
 
   [ John David Anglin ]
@@ -1261,7 +1324,7 @@ dietlibc (0.12-1) unstable; urgency=low
   * The fputc('\n',stderr) bug seems to be fixed in 0.12 (Closes: #122164)
   * I've split the package up into three seperate packages.
 
- -- Abraham vd Merwe <abz@debian.org>  Thu, 4 Dec 2001 22:19:07 +0200
+ -- Abraham vd Merwe <abz@debian.org>  Tue, 04 Dec 2001 22:19:07 +0200
 
 dietlibc (0.11-4) unstable; urgency=low
 

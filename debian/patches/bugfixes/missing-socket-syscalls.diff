@@ -16,8 +16,7 @@ Description: Add missing socket-related syscalls on various platforms
 Author: Christian Seiler <christian@iwakd.de>
 Forwarded: not-yet
 Last-Update: 2018-10-06
----
-This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+
 --- /dev/null
 +++ b/aarch64/recv.c
 @@ -0,0 +1,2 @@

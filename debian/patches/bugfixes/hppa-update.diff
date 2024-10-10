@@ -1,0 +1,74 @@
+Description: Update arch-specific definitions for hppa
+ - Change O_NONBLOCK to get more compatible to other Linux ports by just
+   having one bit set
+ - Drop definitions specific to HP-UX
+ - Switch to standard MADV constants (6.2 and recent stable kernels)
+Author: Helge Deller <deller@gmx.de>
+Bug-Debian:
+ https://bugs.debian.org/974690
+ https://bugs.debian.org/1030998
+Forwarded: no
+
+--- a/include/fcntl.h
++++ b/include/fcntl.h
+@@ -557,18 +557,16 @@ struct flock64 {
+ #define O_RDWR      00000002
+ #define O_ACCMODE   00000003
+ #define O_APPEND    00000010
+-#define O_BLKSEEK   00000100 /* HPUX only */
+ #define O_CREAT     00000400 /* not fcntl */
+ #define O_TRUNC     00001000 /* not fcntl */
+ #define O_EXCL      00002000 /* not fcntl */
+ #define O_LARGEFILE 00004000
+ #define O_ASYNC     00020000
+ #define __O_SYNC      00100000
+-#define O_NONBLOCK  00200004 /* HPUX has separate NDELAY & NONBLOCK */
++#define O_NONBLOCK  00200000
+ #define O_NDELAY    O_NONBLOCK
+ #define O_NOCTTY    00400000 /* not fcntl */
+-#define O_DSYNC     01000000 /* HPUX only */
+-#define O_RSYNC     02000000 /* HPUX only */
++#define O_DSYNC     01000000
+ #define O_NOATIME   04000000
+ #define O_CLOEXEC   010000000
+ #define O_DIRECTORY  00010000
+--- a/include/sys/mman.h
++++ b/include/sys/mman.h
+@@ -167,7 +167,7 @@ __BEGIN_DECLS
+ 
+ #elif defined(__hppa__)
+ #undef MAP_TYPE
+-#define MAP_TYPE	0x03	/* Mask for type of mapping */
++#define MAP_TYPE	0x2b	/* Mask for type of mapping */
+ #define MAP_FIXED	0x04	/* Interpret addr exactly */
+ #define MAP_ANONYMOUS	0x10	/* don't use a file */
+ 
+@@ -196,28 +196,6 @@ __BEGIN_DECLS
+ #define MADV_SPACEAVAIL 5	/* insure that resources are reserved */
+ #define MADV_VPS_PURGE	6	/* Purge pages from VM page cache */
+ #define MADV_VPS_INHERIT 7	/* Inherit parents page size */
+-#define MADV_4K_PAGES	12	/* Use 4K pages	 */
+-#define MADV_16K_PAGES	14	/* Use 16K pages */
+-#define MADV_64K_PAGES	16	/* Use 64K pages */
+-#define MADV_256K_PAGES 18	/* Use 256K pages */
+-#define MADV_1M_PAGES	20	/* Use 1 Megabyte pages */
+-#define MADV_4M_PAGES	22	/* Use 4 Megabyte pages */
+-#define MADV_16M_PAGES	24	/* Use 16 Megabyte pages */
+-#define MADV_64M_PAGES	26	/* Use 64 Megabyte pages */
+-
+-#undef MADV_MERGEABLE
+-#undef MADV_UNMERGEABLE
+-#undef MADV_HUGEPAGE
+-#undef MADV_NOHUGEPAGE
+-#undef MADV_DONTDUMP
+-#undef MADV_DODUMP
+-
+-#define MADV_MERGEABLE 65
+-#define MADV_UNMERGEABLE 66
+-#define MADV_HUGEPAGE 67
+-#define MADV_NOHUGEPAGE 68
+-#define MADV_DONTDUMP 69
+-#define MADV_DODUMP 70
+ 
+ #elif defined(__ia64__)
+ 

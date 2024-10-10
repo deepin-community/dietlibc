@@ -8,8 +8,7 @@ Description: Work around problem of atexit() functions accessing the TCB
  but this needs to be followed up with a proper fix.
 Author: Christian Seiler <christian@iwakd.de>
 Last-Update: 2017-01-05
----
-This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+
 --- a/lib/stackgap-common.h
 +++ b/lib/stackgap-common.h
 @@ -583,7 +583,21 @@ int stackgap(int argc,char* argv[],char*

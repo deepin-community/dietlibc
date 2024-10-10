@@ -9,8 +9,7 @@ Description: Fix register reuse in __testandset on arm64
 Author: Christian Seiler <christian@iwakd.de>
 Bug-Debian: https://bugs.debian.org/851379
 Last-Update: 2017-02-18
----
-This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+
 --- a/aarch64/__testandset.S
 +++ b/aarch64/__testandset.S
 @@ -8,8 +8,8 @@ FUNC_START	__testandset

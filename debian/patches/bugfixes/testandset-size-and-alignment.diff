@@ -6,7 +6,13 @@ Author: mirabilos <tg@debian.org>
 
 --- a/include/pthread.h
 +++ b/include/pthread.h
-@@ -37,7 +37,7 @@ struct _pthread_fastlock { int __spinloc
+@@ -32,12 +32,12 @@ typedef int pthread_t;
+ 
+ /* Fast locks */
+ #ifdef __hppa__
+-struct _pthread_fastlock { int __spinlock; } __attribute__((__aligned__(16)));
++struct _pthread_fastlock { long __spinlock __attribute__((__aligned__(16))); } __attribute__((__aligned__(16)));
+ 
  #define PTHREAD_SPIN_LOCKED 0
  #define PTHREAD_SPIN_UNLOCKED 1
  #else
@@ -24,3 +30,34 @@ Author: mirabilos <tg@debian.org>
  #define PTHREAD_ONCE_INIT	PTHREAD_SPIN_UNLOCKED
  
  int pthread_once(pthread_once_t*once_control,void(*init_routine)(void));
+--- a/libpthread/pthread_spinlock.c
++++ b/libpthread/pthread_spinlock.c
+@@ -81,7 +81,7 @@ try_again:
+   goto try_again;
+ old_and_busted:
+ #endif
+-  while (__testandset(&lock->__spinlock)) {
++  while (__testandset(&(lock->__spinlock))) {
+     if (cnt<MAX_SPIN_COUNT) {
+       sched_yield();
+       cnt++;
+@@ -101,7 +101,7 @@ int __pthread_trylock(struct _pthread_fa
+   return __CAS(&lock->__spinlock,0,1)!=0;
+ old_and_busted:
+ #endif
+-  return __testandset(&lock->__spinlock);
++  return __testandset(&(lock->__spinlock));
+ }
+ 
+ int __pthread_unlock(struct _pthread_fastlock*lock) {
+--- a/libpthread/thread_internal.h
++++ b/libpthread/thread_internal.h
+@@ -104,7 +104,7 @@ struct _thread_key {
+ #define __CUR_RTMIN SIGRTMIN
+ #define __CUR_RTMAX (SIGRTMAX-2)
+ 
+-int __testandset(int*spinlock);
++int __testandset(long *spinlock);
+ 
+ void __pthread_lock(struct _pthread_fastlock*lock);
+ int __pthread_trylock(struct _pthread_fastlock*lock);

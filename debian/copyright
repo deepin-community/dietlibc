@@ -1,57 +1,173 @@
-Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: dietlibc
-Upstream-Contact: dietlibc@fefe.de
-Upstream-Author: Felix von Leitner <felix-dietlibc@fefe.de>
-Source: http://www.fefe.de/dietlibc/
+This package was debianised by Gerrit Pape <pape@smarden.org> on
+Sun,  5 May 2002 19:23:41 +0200.
 
-Files: *
-Copyright: Copyright 2001-2016 Felix von Leitner <felix-dietlibc@fefe.de>
-License: GPL-2+
+It was downloaded by anonymous CVS, see debian/rules get-orig-source.
 
-Files: debian/*
-Copyright: Copyright 2002-2011 Gerrit Pape <pape@smarden.org>
-	   Copyright 2011 Hector Oron <hector.oron@gmail.com>
-	   Copyright 2012-2018 mirabilos <tg@mirbsd.de>
-	   Copyright 2016 Christian Seiler <christian@iwakd.de>
-License: GPL-2+
+dietlibc as a whole is © Felix von Leitner <felix-dietlibc@fefe.de>
+and contributors (see the THANKS file) and published under the GNU
+General Public License, version 2 only. The author explicitly states
+that a separate commercial licence would need to be acquired in order
+to distribute proprietary works using the diet libc. On Debian systems,
+/usr/share/common-licenses/GPL-2 has the full text of the licence.
 
-Files: softfpu/* ppc/softfpu/* longlong.h
-Copyright: Copyright (C) 1991-2016 Free Software Foundation, Inc.
-License: LGPL-2.1+
+Some contributed modules are:
+ © 2005 Markus F.X.J. Oberhumer
+ © 2001, 2002, 2003 Thomas M. Ogrisegg <tom@hi-tek.fnord.at>
+ © 2002 Luc Van Oostenryck
+ © 2002 Andreas Krennmair <ak@tcp-ip.at>
+ © 2001 Guillaume Cottenceau <gc@mandrakesoft.com>
 
-License: GPL-2+
- This program is free software; you can redistribute it
- and/or modify it under the terms of the GNU General Public
- License as published by the Free Software Foundation; either
- version 2 of the License, or (at your option) any later
- version.
- .
- This program is distributed in the hope that it will be
- useful, but WITHOUT ANY WARRANTY; without even the implied
- warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- PURPOSE.  See the GNU General Public License for more
- details.
- .
- You should have received a copy of the GNU General Public
- License along with this package; if not, write to the Free
- Software Foundation, Inc., 51 Franklin St, Fifth Floor,
- Boston, MA  02110-1301 USA
- .
- On Debian systems, the full text of the GNU General Public
- License version 2 can be found in the file
- `/usr/share/common-licenses/GPL-2'.
+Audit support is:
+ © 2003-2004 Red Hat Inc., Durham, North Carolina
+   Written by Rickard E. (Rik) Faith <faith@redhat.com>
 
-License: LGPL-2.1+
- The GNU C Library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Lesser General Public License as
- published by the Free Software Foundation; either version 2.1 of the
- License, or (at your option) any later version.
- .
- The GNU C Library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- Lesser General Public License for more details.
- .
- On Debian systems, the full text of the GNU Lesser General Public
- License version 2.1 can be found in the file
- `/usr/share/common-licenses/LGPL-2.1'.
+Some functionality has been imported from the GNU C library, where
+it was LGPLv2+-licenced or LGPLv2.1+-licenced and:
+ © 1989, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001,
+   2002, 2003, 2004, 2005, 2006, 2009 Free Software Foundation, Inc.
+  Parts are:
+   Contributed by David Mosberger-Tang <davidm@hpl.hp.com>
+   Contributed by David Mosberger <davidm@azstarnet.com>
+   Contributed by Jakub Jelinek <jakub@redhat.com>, 2000
+   Contributed by Andreas Jaeger <aj@suse.de>, 2000
+   Contributed by Andreas Jaeger <aj@arthur.rhein-neckar.de>, 1999
+   Contributed by Ulrich Drepper <drepper@cygnus.com>, 1998, 2002
+   Contributed by Philip Blundell <Philip.Blundell@pobox.com>
+ © 1997–2016 FSF, Richard Henderson <rth@cygnus.com>,
+   Jakub Jelinek <jj@ultra.linux.cz>, David S. Miller <davem@redhat.com>,
+   Peter Maydell <pmaydell@chiark.greenend.org.uk>,
+   Joseph Myers <joseph@codesourcery.com>,
+   Aldy Hernandez <aldyh@redhat.com> and others (softfpu)
+This includes definition for mixed-size 32/64-bit arithmetics on
+32-bit hosts (longlong support), parts of RPC code, SCSI support,
+softfpu (currently only for powerpcspe), architecture support for
+ia64, MIPS, and tests.
+For completeness /usr/share/common-licenses/LGPL-2 and
+/usr/share/common-licenses/LGPL-2.1 contain those licences, although
+as included it’s available under GPLv2.
+
+Soundcard support came in under a BSD licence:
+ * Copyright by Hannu Savolainen 1993-1997
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met: 1. Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer. 2.
+ * Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+
+strlcpy, strlcat came in under the BSD licence:
+ * Copyright (c) 1998, 2000 Todd C. Miller <Todd.Miller@courtesan.com>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. The name of the author may not be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL
+ * THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Some hash support code came under the following additional terms
+and a derived work is included under GPLv2 or later:
+ * Copyright (C) 2002 Andre McCurdy <armccurdy@yahoo.co.uk>
+ * Copyright (C) 1991-2, RSA Data Security, Inc. Created 1991. All
+ * rights reserved.
+ *
+ * License to copy and use this software is granted provided that it
+ * is identified as the "RSA Data Security, Inc. MD5 Message-Digest
+ * Algorithm" in all material mentioning or referencing this software
+ * or this function.
+ *
+ * License is also granted to make and use derivative works provided
+ * that such works are identified as "derived from the RSA Data
+ * Security, Inc. MD5 Message-Digest Algorithm" in all material
+ * mentioning or referencing the derived work.
+ *
+ * RSA Data Security, Inc. makes no representations concerning either
+ * the merchantability of this software or the suitability of this
+ * software for any particular purpose. It is provided "as is"
+ * without express or implied warranty of any kind.
+ * These notices must be retained in any copies of any part of this
+ * documentation and/or software.
+
+In addition, this notice needs to be retained:
+ * <phk@login.dknet.dk> wrote this file.  As long as you retain this notice you
+ * can do whatever you want with this stuff. If we meet some day, and you think
+ * this stuff is worth it, you can buy me a beer in return.   Poul-Henning Kamp
+
+Sun RPC was imported under the following terms, but the version in
+dietlibc comes as part of the diet libc developed by Fefe and others:
+ * Copyright (C) 1984, 1985, 1986, 1987, Sun Microsystems, Inc.
+
+ * Sun RPC is a product of Sun Microsystems, Inc. and is provided for
+ * unrestricted use provided that this legend is included on all tape
+ * media and as a part of the software program in whole or part.  Users
+ * may copy or modify Sun RPC without charge, but are not authorized
+ * to license or distribute it to anyone else except as part of a product or
+ * program developed by the user.
+ *
+ * SUN RPC IS PROVIDED AS IS WITH NO WARRANTIES OF ANY KIND INCLUDING THE
+ * WARRANTIES OF DESIGN, MERCHANTIBILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE, OR ARISING FROM A COURSE OF DEALING, USAGE OR TRADE PRACTICE.
+ *
+ * Sun RPC is provided with no support and without any obligation on the
+ * part of Sun Microsystems, Inc. to assist in its use, correction,
+ * modification or enhancement.
+ *
+ * SUN MICROSYSTEMS, INC. SHALL HAVE NO LIABILITY WITH RESPECT TO THE
+ * INFRINGEMENT OF COPYRIGHTS, TRADE SECRETS OR ANY PATENTS BY SUN RPC
+ * OR ANY PART THEREOF.
+ *
+ * In no event will Sun Microsystems, Inc. be liable for any lost revenue
+ * or profits or other special, indirect and consequential damages, even if
+ * Sun has been advised of the possibility of such damages.
+ *
+ * Sun Microsystems, Inc.
+ * 2550 Garcia Avenue
+ * Mountain View, California  94043
+
+Some parts are based on reports or work by:
+ • Ben Caradoc-Davies <bmcd@physics.otago.ac.nz>
+ • Lawrence Foard <entropy@world.std.com>
+ • Larry McVoy <lm@neteng.engr.sgi.com>
+ • <grd@algonet.se>
+
+The Debian packaging and Debian-originating patches are:
+ © 2002-2011 Gerrit Pape <pape@smarden.org>
+ © 2011 Hector Oron <hector.oron@gmail.com>
+ © 2012-2024 mirabilos <tg@debian.org>
+ © 2016 Christian Seiler <christian@iwakd.de>
+Some patches additionally by:
+ • Helge Deller <deller@gmx.de>
+ • John David Anglin <dave.anglin@bell.net>
+ • Larry Doolittle <larry@doolittle.boa.org>
+
+Unless specifically stated differently, everything is covered by the GPLv2.

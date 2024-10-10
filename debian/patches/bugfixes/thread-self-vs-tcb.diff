@@ -11,8 +11,7 @@ Description: Fix libpthread's __thread_self on most non-x86 platforms
  for now.
 Author: Christian Seiler <christian@iwakd.de>
 Last-Update: 2017-01-06
----
-This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+
 --- a/libpthread/pthread_internal.c
 +++ b/libpthread/pthread_internal.c
 @@ -110,21 +110,9 @@ static _pthread_descr __thread_find_(int

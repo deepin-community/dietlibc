@@ -1,9 +1,7 @@
 {
+  "Bug-Submit": "mailto:dietlibc@fefe.de",
   "Changelog": "http://www.fefe.de/dietlibc/",
   "FAQ": "http://www.fefe.de/dietlibc/FAQ.txt",
   "Name": "diet libc",
-  "Repository": [
-    ":pserver:cvs@cvs.fefe.de:/cvs",
-    "dietlibc"
-  ]
+  "Repository": "cvs+pserver://cvs@cvs.fefe.de/cvs#dietlibc"
 }

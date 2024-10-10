@@ -4,8 +4,7 @@ Description: Fix __testandset on s390x.
  locks.
 Author: Christian Seiler <christian@iwakd.de>
 Last-Update: 2017-01-05
----
-This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+
 --- a/s390x/__testandset.S
 +++ b/s390x/__testandset.S
 @@ -3,8 +3,8 @@

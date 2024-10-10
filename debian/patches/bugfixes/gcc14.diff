@@ -1,0 +1,401 @@
+Description: fixes for building in Debian in 2024
+ with more warnings and more recent GCC
+Author: mirabilos <tg@debian.org>
+Bug-Debian: https://bugs.debian.org/1074910
+Forwarded: no
+
+--- a/Makefile
++++ b/Makefile
+@@ -116,7 +116,7 @@ all: $(WHAT)
+ 
+ profiling: $(OBJDIR)/libgmon.a $(OBJDIR)/pstart.o
+ 
+-DEFAULTCFLAGS=-pipe -nostdinc -ffreestanding -D_REENTRANT $(EXTRACFLAGS)
++DEFAULTCFLAGS=-pipe -nostdinc -ffreestanding -D_DISTRO_EVADE_TIME_BITS -D_REENTRANT $(EXTRACFLAGS)
+ CFLAGS=$(DEFAULTCFLAGS)
+ CROSS=
+ 
+--- a/arm/__fadvise.c
++++ b/arm/__fadvise.c
+@@ -12,5 +12,5 @@ long fadvise64_64(int fd, off64_t offset
+ }
+ 
+ int posix_fadvise(int fd, off64_t offset, off64_t len, int advise)
+-  __attribute__((__alias__("fadvise64_64")));
++  __attribute__((__alias__("fadvise64_64"))) __THROW;
+ #endif
+--- a/diet.c
++++ b/diet.c
+@@ -383,6 +383,10 @@ pp:
+       }
+ #endif
+       *dest++="-D__dietlibc__";
++      *dest++="-D_DISTRO_EVADE_TIME_BITS";
++#if defined(__powerpc__) || defined(__powerpc64__)
++      *dest++="-mstack-protector-guard=global";
++#endif
+       if (mangleopts) {
+ 	const char **o=Os;
+ 
+--- a/dietstdio.h
++++ b/dietstdio.h
+@@ -64,7 +64,7 @@ int __v_scanf(struct arg_scanf* fn, cons
+ 
+ struct arg_printf {
+   void *data;
+-  int (*put)(void*,size_t,void*);
++  int (*put)(const void*,size_t,void*);
+ };
+ 
+ int __v_printf(struct arg_printf* fn, const char *format, va_list arg_ptr);
+--- a/include/rpc/xdr.h
++++ b/include/rpc/xdr.h
+@@ -284,7 +284,7 @@ struct xdr_discrim
+  * know whether the call is a read or a write to the passed parameter
+  * also, the XDR structure is always updated by some of these calls.
+  */
+-extern bool_t xdr_void (void) __THROW;
++extern bool_t xdr_void (XDR *__xdrs, void *) __THROW;
+ extern bool_t xdr_short (XDR *__xdrs, short *__sp) __THROW;
+ extern bool_t xdr_u_short (XDR *__xdrs, unsigned short *__usp) __THROW;
+ extern bool_t xdr_int (XDR *__xdrs, int *__ip) __THROW;
+--- a/lib/__finite.c
++++ b/lib/__finite.c
+@@ -4,4 +4,4 @@ int finite(double d) {
+   return isinf(d)==0 && isnan(d)==0;
+ }
+ 
+-int __finite(double d) __attribute__((alias("finite")));
++int __finite(double d) __attribute__((__const__, alias("finite")));
+--- a/lib/__isinf.c
++++ b/lib/__isinf.c
+@@ -8,7 +8,7 @@ int isinf(double d) {
+   u.d=d;
+   return (u.l==0x7FF0000000000000ll?1:u.l==0xFFF0000000000000ll?-1:0);
+ }
+-int __isinf(double d) __attribute__((alias("isinf")));
++int __isinf(double d) __attribute__((__const__, alias("isinf")));
+ 
+ #if 0
+ TestFromIeeeExtended("7FFF0000000000000000");   /* +infinity */
+--- a/lib/__isnan.c
++++ b/lib/__isnan.c
+@@ -8,7 +8,7 @@ int isnan(double d) {
+   u.d=d;
+   return (u.l==0x7FF8000000000000ll || u.l==0x7FF0000000000000ll || u.l==0xfff8000000000000ll);
+ }
+-int __isnan(double d) __attribute__((alias("isnan")));
++int __isnan(double d) __attribute__((__const__, alias("isnan")));
+ 
+ #if 0
+ TestFromIeeeExtended("7FFF0000000000000000");   /* +infinity */
+--- a/lib/atoll.c
++++ b/lib/atoll.c
+@@ -8,7 +8,7 @@ long long int atoll(const char* s) {
+   int sign=1;
+   while ( *s == ' '  ||  (unsigned int)(*s - 9) < 5u) ++s;
+   switch (*s) {
+-  case '-': sign=-1;
++  case '-': sign=-1; /* FALLTHROUGH */
+   case '+': ++s;
+   }
+   while ((unsigned int) (*s - '0') < 10u) {
+--- a/lib/memcmp.c
++++ b/lib/memcmp.c
+@@ -17,4 +17,4 @@ int memcmp(const void *dst, const void *
+   return 0;
+ }
+ 
+-int bcmp(const char *a,const char *b,size_t c)	__attribute__((weak,alias("memcmp")));
++int bcmp(const char *a,const char *b,size_t c)	__attribute__((weak,alias("memcmp"))) __THROW __pure __nonnull((1,2));
+--- a/lib/mtx_lock.c
++++ b/lib/mtx_lock.c
+@@ -1,4 +1,6 @@
++#ifndef _REENTRANT
+ #define _REENTRANT
++#endif
+ #include <threads.h>
+ #include <sys/futex.h>
+ #include <errno.h>
+--- a/lib/mtx_timedlock.c
++++ b/lib/mtx_timedlock.c
+@@ -1,4 +1,6 @@
++#ifndef _REENTRANT
+ #define _REENTRANT
++#endif
+ #define _DIETLIBC_SOURCE
+ #include <threads.h>
+ #include <sys/futex.h>
+--- a/lib/mtx_trylock.c
++++ b/lib/mtx_trylock.c
+@@ -1,4 +1,6 @@
++#ifndef _REENTRANT
+ #define _REENTRANT
++#endif
+ #define _DIETLIBC_SOURCE
+ #include <threads.h>
+ #include <sys/futex.h>
+--- a/lib/mtx_unlock.c
++++ b/lib/mtx_unlock.c
+@@ -1,4 +1,6 @@
++#ifndef _REENTRANT
+ #define _REENTRANT
++#endif
+ #include <threads.h>
+ #include <sys/futex.h>
+ #include <errno.h>
+--- a/lib/rand.c
++++ b/lib/rand.c
+@@ -8,5 +8,5 @@ int rand(void) {
+ 
+ void srand(unsigned int i) { seed=i?i:23; }
+ 
+-int random(void) __attribute__((alias("rand")));
+-void srandom(unsigned int i) __attribute__((alias("srand")));
++int random(void) __attribute__((alias("rand"))) __THROW;
++void srandom(unsigned int i) __attribute__((alias("srand"))) __THROW;
+--- a/lib/strchr.c
++++ b/lib/strchr.c
+@@ -24,4 +24,4 @@ char *strchr(register const char *t, int
+   return (char*)t;
+ }
+ 
+-char *index(char *t,int c)	__attribute__((weak,alias("strchr")));
++char *index(char *t,int c)	__attribute__((weak,alias("strchr"))) __THROW __pure __nonnull((1));
+--- a/lib/strrchr.c
++++ b/lib/strrchr.c
+@@ -25,4 +25,4 @@ char *strrchr(const char *t, int c) {
+   return (char*)l;
+ }
+ 
+-char *rindex(const char *t,int c)	__attribute__((weak,alias("strrchr")));
++char *rindex(const char *t,int c)	__attribute__((weak,alias("strrchr"))) __THROW __pure __nonnull((1));
+--- a/lib/strtoull.c
++++ b/lib/strtoull.c
+@@ -58,7 +58,7 @@ skip0x:
+ 
+ /* die, BSD, die!!! */
+ unsigned long long int strtouq(const char *nptr, char **endptr, int base)
+-	__attribute__((alias("strtoull")));
++	__attribute__((alias("strtoull"))) __THROW;
+ 
+ uintmax_t strtoumax(const char *nptr, char **endptr, int base)
+-	__attribute__((alias("strtoull")));
++	__attribute__((alias("strtoull"))) __THROW;
+--- a/lib/thrd_exit.c
++++ b/lib/thrd_exit.c
+@@ -1,4 +1,6 @@
++#ifndef _REENTRANT
+ #define _REENTRANT
++#endif
+ #define _LINUX_SOURCE
+ #include <threads.h>
+ #include <unistd.h>
+--- a/lib/thrd_join.c
++++ b/lib/thrd_join.c
+@@ -1,4 +1,6 @@
++#ifndef _REENTRANT
+ #define _REENTRANT
++#endif
+ #include <threads.h>
+ #include <sys/futex.h>
+ #include <sys/mman.h>
+--- a/lib/vsnprintf.c
++++ b/lib/vsnprintf.c
+@@ -11,7 +11,8 @@ struct str_data {
+   size_t size;
+ };
+ 
+-static int swrite(void*ptr, size_t nmemb, struct str_data* sd) {
++static int swrite(const void*ptr, size_t nmemb, void *sd_) {
++  struct str_data* sd = sd_;
+   size_t tmp=sd->size-sd->len;
+   if (tmp>0) {
+     size_t len=nmemb;
+@@ -28,7 +29,7 @@ static int swrite(void*ptr, size_t nmemb
+ int vsnprintf(char* str, size_t size, const char *format, va_list arg_ptr) {
+   int n;
+   struct str_data sd = { str, 0, size?size-1:0 };
+-  struct arg_printf ap = { &sd, (int(*)(void*,size_t,void*)) swrite };
++  struct arg_printf ap = { &sd, swrite };
+   n=__v_printf(&ap,format,arg_ptr);
+   if (str && size && n>=0) {
+     if (size!=(size_t)-1 && ((size_t)n>=size)) str[size-1]=0;
+--- a/lib/wcwidth.c
++++ b/lib/wcwidth.c
+@@ -65,8 +65,8 @@
+ #include <wchar.h>
+ 
+ struct interval {
+-  int first;
+-  int last;
++  wchar_t first;
++  wchar_t last;
+ };
+ 
+ /* auxiliary function for binary search in interval table */
+--- a/libm/bessel.c
++++ b/libm/bessel.c
+@@ -1,3 +1,7 @@
++#include "dietlibm.h"
++#if __LDBL_MANT_DIG__ > __DBL_MANT_DIG__
++/* this code assumes long double is wider than double (x86-specific?) */
++
+ /*--------------------------------------------------------------------------*
+ 
+ Name            j0, j1, jn - Bessel functions
+@@ -169,3 +173,4 @@ double  y0 ( double x )         { return
+ double  y1 ( double x )         { return ___yn ( 1,&x ); }
+ double  yn ( int n, double x )  { return ___yn ( n,&x ); }
+ 
++#endif
+--- a/libm/gamma.c
++++ b/libm/gamma.c
+@@ -1,4 +1,6 @@
+ #include "dietlibm.h"
++#if __LDBL_MANT_DIG__ > __DBL_MANT_DIG__
++/* this code assumes long double is wider than double (x86-specific?) */
+ 
+ /*--------------------------------------------------------------------------*
+ 
+@@ -113,3 +115,5 @@ double  lgamma ( double x )
+ }
+ 
+ double gamma ( double val )  __attribute__ ((weak,alias("lgamma")));
++
++#endif
+--- a/libpthread/pthread_spinlock.c
++++ b/libpthread/pthread_spinlock.c
+@@ -1,4 +1,6 @@
++#ifndef _REENTRANT
+ #define _REENTRANT
++#endif
+ 
+ #include <errno.h>
+ 
+--- a/librpc/xdr.c
++++ b/librpc/xdr.c
+@@ -74,7 +74,7 @@ void xdr_free(xdrproc_t proc, char* objp
+ /*
+  * XDR nothing
+  */
+-bool_t xdr_void( /* xdrs, addr */ )
++bool_t xdr_void(XDR* xdrs __attribute__((__unused__)), void *ignored __attribute__((__unused__)))
+ 	/* XDR *xdrs; */
+ 	/* char* addr; */
+ {
+--- a/libstdio/vfprintf.c
++++ b/libstdio/vfprintf.c
+@@ -4,12 +4,13 @@
+ #include <stdlib.h>
+ #include "dietstdio.h"
+ 
+-static int __fwrite(void*ptr, size_t nmemb, FILE* f) {
++static int __fwrite(const void*ptr, size_t nmemb, void* f_) {
++  FILE* f = f_;
+   return fwrite(ptr,1,nmemb,f);
+ }
+ 
+ int vfprintf(FILE *stream, const char *format, va_list arg_ptr)
+ {
+-  struct arg_printf ap = { stream, (int(*)(void*,size_t,void*)) __fwrite };
++  struct arg_printf ap = { stream, __fwrite };
+   return __v_printf(&ap,format,arg_ptr);
+ }
+--- a/parisc/__fadvise.c
++++ b/parisc/__fadvise.c
+@@ -12,5 +12,5 @@ long fadvise64_64(int fd, off64_t offset
+ }
+ 
+ int posix_fadvise(int fd, off64_t offset, off64_t len, int advise)
+-  __attribute__((__alias__("fadvise64_64")));
++  __attribute__((__alias__("fadvise64_64"))) __THROW;
+ #endif
+--- a/ppc/Makefile.add
++++ b/ppc/Makefile.add
+@@ -1,5 +1,5 @@
+ 
+-CFLAGS+=-mpowerpc-gpopt -mpowerpc-gfxopt -Os
++CFLAGS+=-mpowerpc-gpopt -mpowerpc-gfxopt -Os -mstack-protector-guard=global
+ VPATH:=ppc:syscalls.s:$(VPATH)
+ LIBOBJ+=$(OBJDIR)/__CAS.o $(OBJDIR)/__fadvise.o
+ 
+--- a/ppc/__fadvise.c
++++ b/ppc/__fadvise.c
+@@ -4,7 +4,7 @@
+ #include <unistd.h>
+ 
+ long posix_fadvise(int fd, off64_t offset, off64_t len, int advise)
+-    __attribute__((__alias__("fadvise64_64")));
++    __attribute__((__alias__("fadvise64_64"))) __THROW;
+ 
+ long fadvise64_64(int fd, off64_t offset, off64_t len, int advise)
+ {
+--- a/ppc64/Makefile.add
++++ b/ppc64/Makefile.add
+@@ -1,5 +1,5 @@
+ 
+-CFLAGS+=-Os -mpowerpc64
++CFLAGS+=-Os -mpowerpc64 -mstack-protector-guard=global
+ VPATH:=ppc64:syscalls.s:$(VPATH)
+ LIBOBJ+=$(OBJDIR)/__CAS.o
+ 
+--- a/ppc64le/Makefile.add
++++ b/ppc64le/Makefile.add
+@@ -1,5 +1,5 @@
+ 
+-CFLAGS+=-Os -mpowerpc64
++CFLAGS+=-Os -mpowerpc64 -mstack-protector-guard=global
+ VPATH:=ppc64:syscalls.s:$(VPATH)
+ LIBOBJ+=$(OBJDIR)/__CAS.o
+ 
+--- a/s390/__fadvise.c
++++ b/s390/__fadvise.c
+@@ -26,4 +26,4 @@ long fadvise64_64(int fd, off64_t offset
+ }
+ 
+ int posix_fadvise(int fd, off64_t offset, off64_t len, int advise)
+-  __attribute__((__alias__("fadvise64_64")));
++  __attribute__((__alias__("fadvise64_64"))) __THROW;
+--- a/test/stdlib/tst-calloc.c
++++ b/test/stdlib/tst-calloc.c
+@@ -68,8 +68,8 @@ random_test (void)
+   for (i = 0; i < N; ++i)
+     {
+       int j;
+-      int n = 1 + random () % 10;
+-      int elem = 1 + random () % 100;
++      int n = 1 + (rand() % 10);
++      int elem = 1 + (rand() % 100);
+       int size = n * elem;
+ 
+       ptrs[i] = (char *) calloc (n, elem);
+@@ -96,12 +96,19 @@ random_test (void)
+ static void
+ null_test (void)
+ {
++#define SHIKATANAI (void)!
++
+   /* If the size is 0 the result is implementation defined.  Just make
+      sure the program doesn't crash.  */
++SHIKATANAI
+   calloc (0, 0);
++SHIKATANAI
+   calloc (0, UINT_MAX);
++SHIKATANAI
+   calloc (UINT_MAX, 0);
++SHIKATANAI
+   calloc (0, ~((size_t) 0));
++SHIKATANAI
+   calloc (~((size_t) 0), 0);
+ }
+ 
+--- a/test/thread.c
++++ b/test/thread.c
+@@ -1,4 +1,6 @@
++#ifndef _REENTRANT
+ #define _REENTRANT
++#endif
+ #include <threads.h>
+ #include <stdio.h>
+ #include <unistd.h>
